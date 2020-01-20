@@ -42,10 +42,10 @@ roachprod run ${NIFI} "curl -s https://archive.apache.org/dist/nifi/$NIFI_VERSIO
 roachprod run ${NIFI} 'wget -nv https://jdbc.postgresql.org/download/postgresql-42.2.8.jar'
 roachprod put ${NIFI} './Cockroach-Ingest.xml'
 roachprod run ${NIFI} "sudo ln -s /opt/nifi/nifi-$NIFI_VERSION /opt/nifi/nifi-current"
-roachprod run ${NIFI} "sudo mkdir -p /opt/nifi/nifi-current/conf/templates"
-roachprod run ${NIFI} "sudo mkdir -p /opt/nifi/nifi-current/jdbc"
-roachprod run ${NIFI} "sudo mv Cockroach-Ingest.xml /opt/nifi/nifi-current/conf/templates"
-roachprod run ${NIFI} "sudo mv postgresql-42.2.8.jar /opt/nifi/nifi-current/jdbc"
+roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-current/conf/templates'
+roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-current/jdbc'
+roachprod run ${NIFI} 'sudo mv Cockroach-Ingest.xml /opt/nifi/nifi-current/conf/templates'
+roachprod run ${NIFI} 'sudo mv postgresql-42.2.8.jar /opt/nifi/nifi-current/jdbc'
 
 #### nifi.properties
 #nifi.state.management.embedded.zookeeper.start=true
