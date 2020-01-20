@@ -26,7 +26,7 @@ echo "----------------"
 echo "installing cockroach..."
 roachprod start ${CLUSTER}:1-3
 
-echo "installing haproxy..."
+#echo "installing haproxy..."
 #roachprod run ${CLUSTER}:4 'sudo apt-get update'
 #roachprod run ${CLUSTER}:4 'sudo apt-get install -y haproxy'
 #roachprod run ${CLUSTER}:4 "./cockroach gen haproxy --insecure --host `roachprod ip $CLUSTER:1 --external`"
@@ -42,10 +42,10 @@ roachprod run ${NIFI} "curl -s https://archive.apache.org/dist/nifi/$NIFI_VERSIO
 roachprod run ${NIFI} 'wget -nv https://jdbc.postgresql.org/download/postgresql-42.2.8.jar'
 roachprod put ${NIFI} './Cockroach-Ingest.xml'
 roachprod run ${NIFI} "sudo ln -s /opt/nifi/nifi-$NIFI_VERSION /opt/nifi/nifi-current"
-roachprod run ${NIFI} "sudo mkdir -p /opt/nifi/nifi-current/conf/templates"
-roachprod run ${NIFI} "sudo mkdir -p /opt/nifi/nifi-current/jdbc"
-roachprod run ${NIFI} "sudo mv Cockroach-Ingest.xml /opt/nifi/nifi-current/conf/templates"
-roachprod run ${NIFI} "sudo mv postgresql-42.2.8.jar /opt/nifi/nifi-current/jdbc"
+roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-current/conf/templates'
+roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-current/jdbc'
+roachprod run ${NIFI} 'sudo mv Cockroach-Ingest.xml /opt/nifi/nifi-current/conf/templates'
+roachprod run ${NIFI} 'sudo mv postgresql-42.2.8.jar /opt/nifi/nifi-current/jdbc'
 
 #### nifi.properties
 #nifi.state.management.embedded.zookeeper.start=true
@@ -96,10 +96,21 @@ roachprod run ${CLUSTER} 'sudo rm -f /opt/nifi/nifi-current/conf/flow.xml.gz'
 #roachprod get ${CLUSTER} /opt/nifi/nifi-current/conf/zookeeper.properties ./zookeeper.properties
 #roachprod get ${CLUSTER} /opt/nifi/nifi-current/conf/state-management.xml ./state-management.xml
 
+echo "Starting NiFi ..."
 roachprod run ${NIFI} 'sudo /opt/nifi/nifi-current/bin/nifi.sh start'
 
-sleep 180
+sleep 60
 
+# Using Embedded Zookeeper ocassionally throws
+#java.io.IOException: Unable to create data directory ./state/zookeeper/version-2
+#     at org.apache.zookeeper.server.persistence.FileTxnSnapLog.<init>(FileTxnSnapLog.java:85)
+# Needing a restart
+
+echo "Restarting NiFi ..."
+roachprod run ${NIFI} 'sudo /opt/nifi/nifi-current/bin/nifi.sh stop'
+sleep 10
+roachprod run ${NIFI} 'sudo /opt/nifi/nifi-current/bin/nifi.sh start'
+sleep 90
 
 nifinode=`roachprod ip ${NIFI_NODE} --external`
 
