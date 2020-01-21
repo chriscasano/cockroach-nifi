@@ -40,10 +40,12 @@ roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi'
 roachprod run ${NIFI} 'curl -s https://archive.apache.org/dist/nifi/1.9.2/nifi-1.9.2-bin.tar.gz | sudo tar -C /opt/nifi -xz'
 roachprod run ${NIFI} 'wget -nv https://jdbc.postgresql.org/download/postgresql-42.2.8.jar'
 roachprod put ${NIFI} './Cockroach-Ingest.xml'
+roachprod put ${NIFI} './Twitter.xml'
 roachprod run ${NIFI} 'sudo ln -s /opt/nifi/nifi-1.9.2 /opt/nifi/nifi-current'
 roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-1.9.2/conf/templates'
 roachprod run ${NIFI} 'sudo mkdir -p /opt/nifi/nifi-1.9.2/jdbc'
 roachprod run ${NIFI} 'sudo mv Cockroach-Ingest.xml /opt/nifi/nifi-1.9.2/conf/templates'
+roachprod run ${NIFI} 'sudo mv Twitter.xml /opt/nifi/nifi-1.9.2/conf/templates'
 roachprod run ${NIFI} 'sudo mv postgresql-42.2.8.jar /opt/nifi/nifi-1.9.2/jdbc'
 
 #Backup properties files
