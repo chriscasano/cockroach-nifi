@@ -24,7 +24,7 @@ In another shell run the following...
 
 `deploy-docker.sh`
 
-####To shutdown
+##### To shutdown
 
 `destory-docker.sh`
 
@@ -34,6 +34,6 @@ In another shell run the following...
 
 `./deploy-roachprod.sh`
 
-####To shutdown
+##### To shutdown
 
 `./destroy-roachprod.sh`
