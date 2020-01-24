@@ -1,0 +1,21 @@
+{
+"name":"bank",
+"namespace":"nifi",
+"type":"record",
+"fields": [
+  {"name":"id", "type":"int"},
+  {"name":"balance", "type":"int"},
+  {"name":"payload", "type":"string"}
+]
+}
+
+
+{
+"name":"sample",
+"namespace":"nifi",
+"type":"record",
+"fields": [
+  {"name":"id", "type":"string"},
+  {"name":"payload", "type":"payload"}
+]
+}
